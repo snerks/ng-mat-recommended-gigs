@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { GigDetailComponent } from './gig-detail/gig-detail.component';
+import { GigListComponent } from './gig-list/gig-list.component';
 import { HomeComponent } from './home/home.component';
 
 // const routes: Routes = [];
@@ -14,8 +16,8 @@ const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
   { path: "home", component: HomeComponent },
   // { path: "create", component: ProfileEditorComponent },
-  // { path: "list/:days", component: ShowlistComponent },
-  // { path: "detail/:id", component: ShowdetailComponent },
+  { path: "list/:days", component: GigListComponent },
+  { path: "detail/:id", component: GigDetailComponent },
   // // { path: "detail", component: ShowdetailComponent }
   // { path: "showconfirmdelete/:id", component: ShowConfirmDeleteComponent }
 ];

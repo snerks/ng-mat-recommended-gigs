@@ -1,0 +1,46 @@
+<div *ngIf="showsInfo; then showsInfoContent; else loadingShowsContent"></div>
+<ng-template #loadingShowsContent>Loading Shows...</ng-template>
+
+<ng-template #showsInfoContent>
+  <div
+    style="
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin: 10px 30px 10px 30px;
+    "
+  >
+    <!-- <form> -->
+    <mat-form-field floatLabel="auto">
+      <mat-label>Filter Artists</mat-label>
+      <input
+        matInput
+        [(ngModel)]="artistsSearchTerm"
+        [ngModelOptions]="{ standalone: true }"
+      />
+    </mat-form-field>
+
+    <mat-chip-list aria-label="Gig count" style="margin-left: 15px">
+      <mat-chip color="primary" selected>
+        {{ artistFilterShows.length }} {{ " " }} item{{
+          artistFilterShows.length !== 1 ? "s" : ""
+        }}</mat-chip
+      >
+    </mat-chip-list>
+
+    <mat-checkbox
+      [(ngModel)]="showPastEvents"
+      [ngModelOptions]="{ standalone: true }"
+      style="margin-left: 15px"
+    >
+      Past Events
+    </mat-checkbox>
+
+    <!-- <mat-form-field class="example-full-width">
+        <mat-label>Leave a comment</mat-label>
+        <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+      </mat-form-field> -->
+    <!-- </form> -->
+  </div>
+  <app-gig-list-table [shows]="artistFilterShows"> </app-gig-list-table>
+</ng-template>
