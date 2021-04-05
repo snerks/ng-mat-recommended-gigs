@@ -6,18 +6,18 @@ import { ActivatedRoute } from "@angular/router";
 import { GigService } from "../gig.service";
 
 @Component({
-  selector: 'app-gig-list',
-  templateUrl: './gig-list.component.html',
-  styleUrls: ['./gig-list.component.css']
+  selector: "app-gig-list",
+  templateUrl: "./gig-list.component.html",
+  styleUrls: ["./gig-list.component.css"]
 })
 export class GigListComponent implements OnInit, OnChanges {
   showsInfo: ShowsInfo | undefined;
 
   artistsSearchTerm?: string;
 
-  showPastEvents: boolean = false;
+  showPastEvents = false;
 
-  thresholdInDays: number = 0;
+  thresholdInDays = 0;
 
   constructor(
     private showService: GigService,
@@ -40,7 +40,9 @@ export class GigListComponent implements OnInit, OnChanges {
   getShowsInfo(): void {
     this.showService
       .getShowsInfo()
-      .subscribe(showsInfo => (this.showsInfo = showsInfo));
+      .subscribe({
+        next: (value: ShowsInfo): void => { this.showsInfo = value; }
+      });
   }
 
   get inDateRangeShows(): Show[] {

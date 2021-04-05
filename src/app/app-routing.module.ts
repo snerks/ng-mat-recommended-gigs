@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { GigDetailComponent } from './gig-detail/gig-detail.component';
-import { GigListComponent } from './gig-list/gig-list.component';
-import { HomeComponent } from './home/home.component';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { GigDetailComponent } from "./gig-detail/gig-detail.component";
+import { GigListComponent } from "./gig-list/gig-list.component";
+import { HomeComponent } from "./home/home.component";
 
 // const routes: Routes = [];
 

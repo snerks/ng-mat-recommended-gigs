@@ -17,9 +17,9 @@ import { VenueKeyMap } from "../venues-bts";
 import { GigService } from "../gig.service";
 
 @Component({
-  selector: 'app-gig-detail',
-  templateUrl: './gig-detail.component.html',
-  styleUrls: ['./gig-detail.component.css']
+  selector: "app-gig-detail",
+  templateUrl: "./gig-detail.component.html",
+  styleUrls: ["./gig-detail.component.css"]
   // ,
   // providers: [{ provide: NgbDateAdapter, useClass: NgbIsoDateAdapter }]
 })
@@ -41,7 +41,7 @@ export class GigDetailComponent implements OnInit {
 
   profileForm: FormGroup | undefined;
 
-  isUpdating: boolean = false;
+  isUpdating = false;
   errorMessage: string | null = null;
 
   knownArtists: string[] = [];
@@ -99,7 +99,7 @@ export class GigDetailComponent implements OnInit {
     private showService: GigService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     // this.getShowsInfo();
 
     const getSuccessFn = (showsInfo: ShowsInfo) => {
@@ -257,11 +257,11 @@ export class GigDetailComponent implements OnInit {
 
   flattenNestedArray<T>(array: T[][], mutable: T[][] = []): T[] {
     const toString = Object.prototype.toString;
-    const arrayTypeStr = '[object Array]';
+    const arrayTypeStr = "[object Array]";
 
-    let result: T[] = [];
-    var nodes = (mutable && array) || array.slice();
-    var node: any;
+    const result: T[] = [];
+    const nodes = (mutable && array) || array.slice();
+    let node: any;
 
     if (!array.length) {
         return result;

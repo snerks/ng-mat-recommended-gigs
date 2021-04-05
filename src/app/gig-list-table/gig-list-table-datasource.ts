@@ -1,9 +1,9 @@
-import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { map } from 'rxjs/operators';
-import { Observable, of as observableOf, merge } from 'rxjs';
-import { Show } from '../models';
+import { DataSource } from "@angular/cdk/collections";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { map } from "rxjs/operators";
+import { Observable, of as observableOf, merge } from "rxjs";
+import { Show } from "../models";
 
 // // TODO: Replace this with your own data model type
 // export interface GigListTableItem {
@@ -64,7 +64,7 @@ export class GigListTableDataSource extends DataSource<Show> {
           return this.getPagedData(this.getSortedData([...this.data ]));
         }));
     } else {
-      throw Error('Please set the paginator and sort on the data source before connecting.');
+      throw Error("Please set the paginator and sort on the data source before connecting.");
     }
   }
 
@@ -92,14 +92,14 @@ export class GigListTableDataSource extends DataSource<Show> {
    * this would be replaced by requesting the appropriate data from the server.
    */
   private getSortedData(data: Show[]): Show[] {
-    if (!this.sort || !this.sort.active || this.sort.direction === '') {
+    if (!this.sort || !this.sort.active || this.sort.direction === "") {
       return data;
     }
 
     return data.sort((a, b) => {
-      const isAsc = this.sort?.direction === 'asc';
+      const isAsc = this.sort?.direction === "asc";
       switch (this.sort?.active) {
-        case 'date': return compare(a.date.toISOString(), b.date.toISOString(), isAsc);
+        case "date": return compare(a.date.toISOString(), b.date.toISOString(), isAsc);
         // case 'id': return compare(+a.id, +b.id, isAsc);
         default: return 0;
       }
