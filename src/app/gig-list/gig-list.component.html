@@ -17,13 +17,15 @@
         matInput
         [(ngModel)]="artistsSearchTerm"
         [ngModelOptions]="{ standalone: true }"
+        #artistsSearchTermInput
+        (keyup)="onArtistsSearchTermInputKey(artistsSearchTermInput.value)"
       />
     </mat-form-field>
 
     <mat-chip-list aria-label="Gig count" style="margin-left: 15px">
       <mat-chip color="primary" selected>
-        {{ artistFilterShows.length }} {{ " " }} item{{
-          artistFilterShows.length !== 1 ? "s" : ""
+        {{ filteredShowCount }} {{ " " }} item{{
+          filteredShowCount !== 1 ? "s" : ""
         }}</mat-chip
       >
     </mat-chip-list>
@@ -42,5 +44,12 @@
       </mat-form-field> -->
     <!-- </form> -->
   </div>
-  <app-gig-list-table [shows]="artistFilterShows"> </app-gig-list-table>
+
+  <app-gig-list-table
+    [shows]="shows"
+    [artistFilter]="artistsSearchTerm"
+    [showPastEvents]="showPastEvents"
+    (filteredShowCountChangedEvent)="onFilteredShowCountChanged($event)"
+  >
+  </app-gig-list-table>
 </ng-template>

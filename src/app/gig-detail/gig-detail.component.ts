@@ -102,6 +102,8 @@ export class GigDetailComponent implements OnInit {
   ngOnInit(): void {
     // this.getShowsInfo();
 
+    const flattened = (arr: string[][]) => ([] as string[]).concat(...arr);
+
     const getSuccessFn = (showsInfo: ShowsInfo) => {
       // console.log("getShowsInfo:getSuccessFn");
       // console.log(showsInfo);
@@ -114,7 +116,8 @@ export class GigDetailComponent implements OnInit {
         show.artists.map(artist => artist.name)
       );
 
-      const showsArtistNames = this.flattenNestedArray(showsArtistNamesNested);
+      // const showsArtistNames = this.flattenNestedArray(showsArtistNamesNested);
+      const showsArtistNames = flattened(showsArtistNamesNested);
 
       // const uniqueShowsArtistNames = [...new Set(showsArtistNames)];
       // const uniqueShowsArtistNames = showsArtistNames.reduce((a, b) => {
@@ -124,13 +127,21 @@ export class GigDetailComponent implements OnInit {
       //   return a;
       // }, []);
 
-      const uniqueShowsArtistNames: string[] = [];
-      for (let index = 0; index < showsArtistNames.length; index++) {
-        const element = showsArtistNames[index];
-        if (uniqueShowsArtistNames.indexOf(element) < 0) {
-          uniqueShowsArtistNames.push(element);
-        }
-      }
+      // const uniqueShowsArtistNames: string[] = [];
+      // // for (let index = 0; index < showsArtistNames.length; index++) {
+      // //   const element = showsArtistNames[index];
+      // //   if (uniqueShowsArtistNames.indexOf(element) < 0) {
+      // //     uniqueShowsArtistNames.push(element);
+      // //   }
+      // // }
+
+      // for (const showsArtistName of showsArtistNames) {
+      //   if (uniqueShowsArtistNames.indexOf(showsArtistName) < 0) {
+      //     uniqueShowsArtistNames.push(showsArtistName);
+      //   }
+      // }
+
+      const uniqueShowsArtistNames = Array.from(new Set(showsArtistNames));
 
       uniqueShowsArtistNames.sort();
 

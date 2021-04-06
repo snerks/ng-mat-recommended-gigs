@@ -10,9 +10,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { GigListComponent } from "./gig-list/gig-list.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GigListTableComponent } from "./gig-list-table/gig-list-table.component";
-import { MatTableModule } from "@angular/material/table";
-import { MatPaginatorModule } from "@angular/material/paginator";
-import { MatSortModule } from "@angular/material/sort";
+
 import { GigDetailComponent } from "./gig-detail/gig-detail.component";
 
 @NgModule({
@@ -30,10 +28,7 @@ import { GigDetailComponent } from "./gig-detail/gig-detail.component";
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

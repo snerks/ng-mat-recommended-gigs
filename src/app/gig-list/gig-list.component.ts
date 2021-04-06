@@ -19,6 +19,8 @@ export class GigListComponent implements OnInit, OnChanges {
 
   thresholdInDays = 0;
 
+  filteredShowCount = 0;
+
   constructor(
     private showService: GigService,
     private route: ActivatedRoute
@@ -37,6 +39,14 @@ export class GigListComponent implements OnInit, OnChanges {
 
   }
 
+  get shows() {
+    return this.showsInfo?.shows || [];
+  }
+
+  // get filteredShowCount() {
+  //   return this.dataSource.filteredShowCount;
+  // }
+
   getShowsInfo(): void {
     this.showService
       .getShowsInfo()
@@ -45,108 +55,115 @@ export class GigListComponent implements OnInit, OnChanges {
       });
   }
 
-  get inDateRangeShows(): Show[] {
-    const shows = this.showsInfo?.shows || [];
-
-    if (this.showPastEvents) {
-      return shows;
-    }
-
-    const results = shows.filter(this.dateRangeShowFilter);
-
-    return results;
+  onFilteredShowCountChanged(value: number) {
+    this.filteredShowCount = value;
+  }
+  onArtistsSearchTermInputKey(value: string) {
+    this.artistsSearchTerm = value;
   }
 
-  dateRangeShowFilter = (show: Show) => {
-    const currentDateTime = new Date();
+  // get inDateRangeShows(): Show[] {
+  //   const shows = this.showsInfo?.shows || [];
 
-    let willShowEvent = false;
+  //   if (this.showPastEvents) {
+  //     return shows;
+  //   }
 
-    if (this.showPastEvents) {
-      willShowEvent = true;
-    } else {
-      const eventDate = new Date(show.date);
-      const eventDateEndOfDay = moment(eventDate).endOf("day");
+  //   const results = shows.filter(this.dateRangeShowFilter);
 
-      const isPastEvent = eventDateEndOfDay.isBefore(currentDateTime);
+  //   return results;
+  // }
 
-      willShowEvent = !isPastEvent;
-    }
+  // dateRangeShowFilter = (show: Show) => {
+  //   const currentDateTime = new Date();
 
-    return willShowEvent;
-    // tslint:disable-next-line:semicolon
-  };
+  //   let willShowEvent = false;
 
-  get inThresholdShows(): Show[] {
-    const results = this.inDateRangeShows.filter(show =>
-      this.isRecentlyAdded(show, this.thresholdInDays)
-    );
+  //   if (this.showPastEvents) {
+  //     willShowEvent = true;
+  //   } else {
+  //     const eventDate = new Date(show.date);
+  //     const eventDateEndOfDay = moment(eventDate).endOf("day");
 
-    return results;
-  }
+  //     const isPastEvent = eventDateEndOfDay.isBefore(currentDateTime);
 
-  get artistFilterShows(): Show[] {
-    //     const results = this.inDateRangeShows.filter(show => {
-    const results = this.inThresholdShows.filter(show => {
-      if (!this.artistsSearchTerm) {
-        return true;
-      }
+  //     willShowEvent = !isPastEvent;
+  //   }
 
-      const showArtistsText = show.artists.reduce(
-        (previousArtistsResult, currentArtist, currentArtistIndex) => {
-          const currentArtistText = currentArtist.name;
+  //   return willShowEvent;
+  //   // tslint:disable-next-line:semicolon
+  // };
 
-          return currentArtistIndex === 0
-            ? currentArtistText
-            : previousArtistsResult + " " + currentArtistText;
-        },
-        ""
-      );
+  // get inThresholdShows(): Show[] {
+  //   const results = this.inDateRangeShows.filter(show =>
+  //     this.isRecentlyAdded(show, this.thresholdInDays)
+  //   );
 
-      return (
-        showArtistsText
-          .toLowerCase()
-          .indexOf(this.artistsSearchTerm.toLowerCase()) > -1
-      );
-    });
+  //   return results;
+  // }
 
-    return results;
-  }
+  // get artistFilterShows(): Show[] {
+  //   //     const results = this.inDateRangeShows.filter(show => {
+  //   const results = this.inThresholdShows.filter(show => {
+  //     if (!this.artistsSearchTerm) {
+  //       return true;
+  //     }
 
-  getEventIdBtsForUrl(show: Show): string {
-    if (!show) {
-      return "";
-    }
+  //     const showArtistsText = show.artists.reduce(
+  //       (previousArtistsResult, currentArtist, currentArtistIndex) => {
+  //         const currentArtistText = currentArtist.name;
 
-    if (!show.eventIdBts) {
-      return "";
-    }
+  //         return currentArtistIndex === 0
+  //           ? currentArtistText
+  //           : previousArtistsResult + " " + currentArtistText;
+  //       },
+  //       ""
+  //     );
 
-    return show.eventIdBts.toString().trim();
-  }
+  //     return (
+  //       showArtistsText
+  //         .toLowerCase()
+  //         .indexOf(this.artistsSearchTerm.toLowerCase()) > -1
+  //     );
+  //   });
 
-  get sortedShows(): Show[] {
-    const results = this.artistFilterShows.sort((lhs: Show, rhs: Show) => {
-      const lhsDate = new Date(lhs.date);
-      const rhsDate = new Date(rhs.date);
+  //   return results;
+  // }
 
-      const result = lhsDate.getTime() - rhsDate.getTime();
+  // getEventIdBtsForUrl(show: Show): string {
+  //   if (!show) {
+  //     return "";
+  //   }
 
-      return result;
-    });
+  //   if (!show.eventIdBts) {
+  //     return "";
+  //   }
 
-    return results;
-  }
+  //   return show.eventIdBts.toString().trim();
+  // }
 
-  getAddedInThresholdShows(thresholdInDays = 0): Show[] {
-    if (!this.showsInfo) {
-      return [];
-    }
+  // get sortedShows(): Show[] {
+  //   const results = this.artistFilterShows.sort((lhs: Show, rhs: Show) => {
+  //     const lhsDate = new Date(lhs.date);
+  //     const rhsDate = new Date(rhs.date);
 
-    return this.showsInfo.shows.filter(show => {
-      return this.isRecentlyAdded(show, thresholdInDays);
-    });
-  }
+  //     const result = lhsDate.getTime() - rhsDate.getTime();
+
+  //     return result;
+  //   });
+
+  //   return results;
+  // }
+
+  // getAddedInThresholdShows(thresholdInDays = 0): Show[] {
+  //   if (!this.showsInfo) {
+  //     return [];
+  //   }
+
+  //   return this.showsInfo.shows.filter(show => {
+  //     return this.isRecentlyAdded(show, thresholdInDays);
+  //   });
+  // }
 
   isRecentlyAdded = (show: Show, thresholdInDays = 0) => {
     if (!show.addedDate) {
@@ -172,41 +189,41 @@ export class GigListComponent implements OnInit, OnChanges {
     // tslint:disable-next-line:semicolon
   };
 
-  get allShows(): Show[] {
-    if (!this.showsInfo) {
-      return [];
-    }
+  // get allShows(): Show[] {
+  //   if (!this.showsInfo) {
+  //     return [];
+  //   }
 
-    return this.showsInfo.shows;
-  }
+  //   return this.showsInfo.shows;
+  // }
 
-  get addedTodayShows(): Show[] {
-    if (!this.showsInfo) {
-      return [];
-    }
+  // get addedTodayShows(): Show[] {
+  //   if (!this.showsInfo) {
+  //     return [];
+  //   }
 
-    return this.showsInfo.shows.filter(show => {
-      return this.isRecentlyAdded(show, 1);
-    });
-  }
+  //   return this.showsInfo.shows.filter(show => {
+  //     return this.isRecentlyAdded(show, 1);
+  //   });
+  // }
 
-  get addedWithin3DaysShows(): Show[] {
-    if (!this.showsInfo) {
-      return [];
-    }
+  // get addedWithin3DaysShows(): Show[] {
+  //   if (!this.showsInfo) {
+  //     return [];
+  //   }
 
-    return this.showsInfo.shows.filter(show => {
-      return this.isRecentlyAdded(show, 3);
-    });
-  }
+  //   return this.showsInfo.shows.filter(show => {
+  //     return this.isRecentlyAdded(show, 3);
+  //   });
+  // }
 
-  get addedWithin7DaysShows(): Show[] {
-    if (!this.showsInfo) {
-      return [];
-    }
+  // get addedWithin7DaysShows(): Show[] {
+  //   if (!this.showsInfo) {
+  //     return [];
+  //   }
 
-    return this.showsInfo.shows.filter(show => {
-      return this.isRecentlyAdded(show, 7);
-    });
-  }
+  //   return this.showsInfo.shows.filter(show => {
+  //     return this.isRecentlyAdded(show, 7);
+  //   });
+  // }
 }
