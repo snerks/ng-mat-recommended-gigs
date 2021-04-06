@@ -50,7 +50,11 @@ export class GigService {
       // console.log("getShowsInfo:completeFn");
     };
 
-    this.getShowsInfo().subscribe(getSuccessFn, getErrorFn, getCompleteFn);
+    this.getShowsInfo().subscribe({
+      next: getSuccessFn,
+      error: getErrorFn,
+      complete: getCompleteFn
+    });
     // this.putShowsInfo().subscribe(getSuccessFn, getErrorFn, getCompleteFn);
   }
 
