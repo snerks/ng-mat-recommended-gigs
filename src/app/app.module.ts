@@ -12,6 +12,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GigListTableComponent } from "./gig-list-table/gig-list-table.component";
 
 import { GigDetailComponent } from "./gig-detail/gig-detail.component";
+import { MatDatepicker } from "@angular/material/datepicker";
+import { MAT_DATE_LOCALE } from "@angular/material/core";
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from "@angular/material-moment-adapter";
 
 @NgModule({
   declarations: [
@@ -30,7 +33,11 @@ import { GigDetailComponent } from "./gig-detail/gig-detail.component";
     ReactiveFormsModule,
     MaterialModule
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: "en-GB" },
+    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}},
+    MatDatepicker
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

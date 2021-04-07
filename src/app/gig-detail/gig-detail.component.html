@@ -1,3 +1,6 @@
+<mat-toolbar color="primary">
+  <span>Gigs Of Note</span>
+</mat-toolbar>
 <div
   *ngIf="profileForm"
   style="margin-top: 15px; padding-left: 15px; padding-right: 15px"
@@ -33,6 +36,27 @@
         Please choose an Event Date.
       </div>
     </div> -->
+
+    <mat-form-field>
+      <mat-label>Event Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="date"
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <div
+        *ngIf="
+          profileForm.get('date')!.invalid &&
+          (profileForm.get('date')!.dirty || profileForm.get('date')!.touched)
+        "
+        class="alert alert-danger"
+      >
+        Please choose an Event Date.
+      </div>
+    </mat-form-field>
 
     <mat-form-field style="width: 100%">
       <mat-label>Venue</mat-label>
@@ -167,7 +191,7 @@
       formControlName="isSoldOut"
       style="margin-left: 15px"
     >
-      Sold Out
+      Sold Out?
     </mat-checkbox>
 
     <mat-checkbox
@@ -175,7 +199,7 @@
       formControlName="isCancelled"
       style="margin-left: 15px"
     >
-      Cancelled
+      Cancelled?
     </mat-checkbox>
 
     <div>
@@ -211,7 +235,7 @@
     <br />
     <br />
 
-    <!-- <pre>{{ profileForm.value | json }}</pre> -->
+    <pre>{{ profileForm.value | json }}</pre>
   </form>
 
   <div>
