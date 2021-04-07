@@ -22,13 +22,13 @@
       />
     </mat-form-field>
 
-    <mat-chip-list aria-label="Gig count" style="margin-left: 15px">
+    <!-- <mat-chip-list aria-label="Gig count" style="margin-left: 15px">
       <mat-chip color="primary" selected>
         {{ filteredShowCount }} {{ " " }} item{{
           filteredShowCount !== 1 ? "s" : ""
         }}</mat-chip
       >
-    </mat-chip-list>
+    </mat-chip-list> -->
 
     <mat-checkbox
       [(ngModel)]="showPastEvents"
@@ -49,7 +49,7 @@
     [shows]="shows"
     [artistFilter]="artistsSearchTerm"
     [showPastEvents]="showPastEvents"
-    (filteredShowCountChangedEvent)="onFilteredShowCountChanged($event)"
   >
+    <!-- (filteredShowCountChangedEvent)="onFilteredShowCountChanged($event)" -->
   </app-gig-list-table>
 </ng-template>

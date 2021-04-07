@@ -25,8 +25,8 @@ export class GigListTableComponent implements AfterViewInit, OnInit, OnChanges {
   @Input()
   showPastEvents = false;
 
-  @Output()
-  filteredShowCountChangedEvent = new EventEmitter<number>();
+  // @Output()
+  // filteredShowCountChangedEvent = new EventEmitter<number>();
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ["day", "date", "artists", "venue", "id", "notes"];
@@ -49,7 +49,7 @@ export class GigListTableComponent implements AfterViewInit, OnInit, OnChanges {
 
   private refreshData() {
     this.dataSource.loadGigs(this.artistFilter || "", this.showPastEvents, 0);
-    this.filteredShowCountChangedEvent.emit(this.filteredShowCount);
+    // this.filteredShowCountChangedEvent.emit(this.filteredShowCount);
   }
 
   ngOnChanges() {

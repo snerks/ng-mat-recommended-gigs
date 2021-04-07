@@ -1,4 +1,14 @@
 <div class="mat-elevation-z8">
+  <div style="padding: 10px 20px 0 20px">
+    <mat-chip-list aria-label="Gig count">
+      <mat-chip color="primary" selected>
+        {{ filteredShowCount }} {{ " " }} item{{
+          filteredShowCount !== 1 ? "s" : ""
+        }}</mat-chip
+      >
+    </mat-chip-list>
+  </div>
+
   <table mat-table class="full-width-table" aria-label="Elements">
     <!-- Id Column -->
     <ng-container matColumnDef="day">
