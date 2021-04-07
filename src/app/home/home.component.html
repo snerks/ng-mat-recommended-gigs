@@ -1,59 +1,85 @@
-<nav>
-  <div style="margin: 10px">
-    <a routerLink="/list/0" href="#" role="button">
-      <i class="fa fa-list"></i> View All Shows ({{ allShows.length }})
+<mat-grid-list cols="1" rowHeight="50px">
+  <mat-grid-tile>
+    <!-- <div style="margin: 10px">
+      <a routerLink="/list/0" href="#" role="button">
+        <i class="fa fa-list"></i> View All Shows ({{ allShows.length }})
+      </a>
+    </div> -->
+    <a mat-raised-button routerLink="/list/0" href="#" style="width: 80%">
+      <mat-icon aria-hidden="false" aria-label="list icon">list</mat-icon>
+      View All Shows ({{ allShows.length }})
     </a>
-  </div>
-
-  <div style="margin: 10px">
-    <a
-      routerLink="/list/1"
-      [ngClass]="{
-        'btn btn-lg btn-block': true,
-        'btn-outline-primary': addedTodayShows.length === 0,
-        'btn-success': addedTodayShows.length > 0
-      }"
-      href="#"
-      role="button"
-    >
-      <i class="fa fa-list"></i> Added Today ({{ addedTodayShows.length }})
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <!-- <div style="margin: 10px">
+      <a
+        routerLink="/list/1"
+        [ngClass]="{
+          'btn btn-lg btn-block': true,
+          'btn-outline-primary': addedTodayShows.length === 0,
+          'btn-success': addedTodayShows.length > 0
+        }"
+        href="#"
+        role="button"
+      >
+        <i class="fa fa-list"></i> Added Today ({{ addedTodayShows.length }})
+      </a>
+    </div> -->
+    <a mat-raised-button routerLink="/list/1" href="#" style="width: 80%">
+      <mat-icon aria-hidden="false" aria-label="list icon">list</mat-icon>
+      Added Today ({{ addedTodayShows.length }})
     </a>
-  </div>
-
-  <div style="margin: 10px">
-    <a
-      routerLink="/list/3"
-      class="btn btn-outline-primary btn-lg btn-block"
-      href="#"
-      role="button"
-    >
-      <i class="fa fa-list"></i> Added In Last 3 Days ({{
-        addedWithin3DaysShows.length
-      }})
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <!-- <div style="margin: 10px">
+      <a
+        routerLink="/list/3"
+        class="btn btn-outline-primary btn-lg btn-block"
+        href="#"
+        role="button"
+      >
+        <i class="fa fa-list"></i> Added In Last 3 Days ({{
+          addedWithin3DaysShows.length
+        }})
+      </a>
+    </div> -->
+    <a mat-raised-button routerLink="/list/3" href="#" style="width: 80%">
+      <mat-icon aria-hidden="false" aria-label="list icon">list</mat-icon>
+      Added In Last 3 Days ({{ addedWithin3DaysShows.length }})
     </a>
-  </div>
-
-  <div style="margin: 10px">
-    <a
-      routerLink="/list/7"
-      class="btn btn-outline-primary btn-lg btn-block"
-      href="#"
-      role="button"
-    >
-      <i class="fa fa-list"></i> Added In Last 7 Days ({{
-        addedWithin7DaysShows.length
-      }})
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <!-- <div style="margin: 10px">
+      <a
+        routerLink="/list/7"
+        class="btn btn-outline-primary btn-lg btn-block"
+        href="#"
+        role="button"
+      >
+        <i class="fa fa-list"></i> Added In Last 7 Days ({{
+          addedWithin7DaysShows.length
+        }})
+      </a>
+    </div> -->
+    <a mat-raised-button routerLink="/list/7" href="#" style="width: 80%">
+      <mat-icon aria-hidden="false" aria-label="list icon">list</mat-icon>
+      Added In Last 7 Days ({{ addedWithin7DaysShows.length }})
     </a>
-  </div>
-
-  <div style="margin: 10px">
-    <a
-      routerLink="/create"
-      class="btn btn-outline-primary btn-lg btn-block"
-      href="#"
-      role="button"
-    >
-      <i class="fa fa-plus-circle"></i> Add New Show
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <!-- <div style="margin: 10px">
+      <a
+        routerLink="/create"
+        class="btn btn-outline-primary btn-lg btn-block"
+        href="#"
+        role="button"
+      >
+        <i class="fa fa-plus-circle"></i> Add New Show
+      </a>
+    </div> -->
+    <a mat-raised-button routerLink="/detail/-1" href="#" style="width: 80%">
+      <mat-icon aria-hidden="false" aria-label="list icon">add</mat-icon>
+      Add New Show
     </a>
-  </div>
-</nav>
+  </mat-grid-tile>
+</mat-grid-list>

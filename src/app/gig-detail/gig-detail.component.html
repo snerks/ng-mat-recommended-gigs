@@ -1,10 +1,13 @@
-<mat-toolbar color="primary">
-  <span>Gigs Of Note</span>
-</mat-toolbar>
 <div
   *ngIf="profileForm"
   style="margin-top: 15px; padding-left: 15px; padding-right: 15px"
 >
+  <!-- <div>
+    Matching Venues = [
+    {{ searchVenue("Rough") }}
+    ]
+  </div> -->
+
   <form
     [formGroup]="profileForm"
     (ngSubmit)="onSubmit()"
@@ -58,16 +61,25 @@
       </div>
     </mat-form-field>
 
+    <mat-autocomplete #autoVenue="matAutocomplete">
+      <mat-option
+        *ngFor="let option of filteredVenues | async"
+        [value]="option"
+      >
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+
     <mat-form-field style="width: 100%">
       <mat-label>Venue</mat-label>
       <input
         matInput
         formControlName="venue"
         type="text"
-        class="form-control"
         id="venue"
         aria-describedby="venueHelp"
         required
+        [matAutocomplete]="autoVenue"
       />
       <div
         *ngIf="
@@ -78,6 +90,15 @@
         Please choose a Venue.
       </div>
     </mat-form-field>
+
+    <mat-autocomplete #autoArtist="matAutocomplete">
+      <mat-option
+        *ngFor="let option of filteredKnownArtists | async"
+        [value]="option"
+      >
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
 
     <div formArrayName="artists" class="clearfix">
       <div *ngFor="let artist of artists.controls; let i = index">
@@ -92,6 +113,7 @@
               id="artistName"
               aria-describedby="artistNameHelp"
               required
+              [matAutocomplete]="autoArtist"
             />
             <div
               *ngIf="
@@ -235,7 +257,7 @@
     <br />
     <br />
 
-    <pre>{{ profileForm.value | json }}</pre>
+    <!-- <pre>{{ profileForm.value | json }}</pre> -->
   </form>
 
   <div>

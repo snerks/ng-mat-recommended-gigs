@@ -12,6 +12,8 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 const MaterialComponents = [
   MatButtonModule,
@@ -26,7 +28,9 @@ const MaterialComponents = [
   MatToolbarModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatMomentDateModule
+  MatMomentDateModule,
+  MatGridListModule,
+  MatAutocompleteModule
 ];
 
 @NgModule({

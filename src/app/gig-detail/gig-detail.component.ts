@@ -1,18 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
+import { FormBuilder, Validators, FormArray, FormGroup, FormControl } from "@angular/forms";
 
-// import { ShowService } from "../show.service";
-import { ShowsInfo, Show } from "../models";
-
-import { FormBuilder, Validators, FormArray, FormGroup } from "@angular/forms";
-// import { NgbDateAdapter } from "@ng-bootstrap/ng-bootstrap";
+import { Observable, of } from "rxjs";
+import { debounceTime, distinctUntilChanged, map, startWith } from "rxjs/operators";
 import { v1, v4 } from "uuid";
 
-// import { NgbIsoDateAdapter } from "../ngb-iso-date-adapter";
-
-import { Observable } from "rxjs";
-import { debounceTime, distinctUntilChanged, map } from "rxjs/operators";
+import { ShowsInfo, Show } from "../models";
 import { VenueKeyMap } from "../venues-bts";
 import { GigService } from "../gig.service";
 
@@ -24,21 +19,6 @@ import { GigService } from "../gig.service";
   // providers: [{ provide: NgbDateAdapter, useClass: NgbIsoDateAdapter }]
 })
 export class GigDetailComponent implements OnInit {
-  // profileForm = this.fb.group({
-  //   id: [this.getNewGuidV4()],
-  //   addedDate: [new Date().toISOString().substring(0, 10), Validators.required],
-  //   venue: ["", Validators.required],
-  //   date: ["", Validators.required],
-  //   artists: this.fb.array([
-  //     this.fb.group({
-  //       name: ["", Validators.required]
-  //     })
-  //   ]),
-
-  //   isSoldOut: [false],
-  //   isCancelled: [false]
-  // });
-
   profileForm: FormGroup | undefined;
 
   isUpdating = false;
@@ -49,47 +29,87 @@ export class GigDetailComponent implements OnInit {
   knownArtistsSearchTerm: string | undefined = undefined;
   knownArtistsMatches: string[] = [];
 
+  filteredKnownArtists: Observable<string[]> = of([]);
+  filteredVenues: Observable<string[]> = of([]);
+
   showsInfo: ShowsInfo | undefined = undefined;
 
-  searchKnownArtists = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      map(term => {
-        this.knownArtistsSearchTerm = term;
+  // searchKnownArtists = (text$: Observable<string>) =>
+  //   text$.pipe(
+  //     debounceTime(200),
+  //     distinctUntilChanged(),
+  //     map(term => {
+  //       this.knownArtistsSearchTerm = term;
 
-        const results =
-          term.length < 2
-            ? []
-            : this.knownArtists
-                .filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)
-                .slice(0, 10);
+  //       const results =
+  //         term.length < 2
+  //           ? []
+  //           : this.knownArtists
+  //               .filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)
+  //               .slice(0, 10);
 
-        this.knownArtistsMatches = results;
+  //       this.knownArtistsMatches = results;
 
-        return results;
-      })
-      // tslint:disable-next-line:semicolon
-    );
+  //       return results;
+  //     })
+  //     // tslint:disable-next-line:semicolon
+  //   );
 
-  searchVenue = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      map(
-        term =>
-          term.length < 2
-            ? []
-            : VenueKeyMap.filter(
-                (kvp: any) =>
-                  kvp.venueBts.name.toLowerCase().indexOf(term.toLowerCase()) >
-                  -1
-              )
-                .map((kvp: any) => kvp.venueBts.name)
-                .slice(0, 10)
+  // searchVenue = (text$: Observable<string>) =>
+  //   text$.pipe(
+  //     debounceTime(200),
+  //     distinctUntilChanged(),
+  //     map(
+  //       term =>
+  //         term.length < 2
+  //           ? []
+  //           : VenueKeyMap.filter(
+  //               (kvp: any) =>
+  //                 kvp.venueBts.name.toLowerCase().indexOf(term.toLowerCase()) >
+  //                 -1
+  //             )
+  //               .map((kvp: any) => kvp.venueBts.name)
+  //               .slice(0, 10)
+  //     )
+  //     // tslint:disable-next-line:semicolon
+  //   );
+
+  searchKnownArtists = (term: string) =>
+  {
+    console.log("searchKnownArtists : [" + term + "]");
+
+    this.knownArtistsSearchTerm = term;
+
+    const results =
+      term.length < 2
+        ? []
+        : this.knownArtists
+            .filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)
+            .slice(0, 10);
+
+    this.knownArtistsMatches = results;
+
+    return results;
+  }
+
+  searchVenue = (term: string): string[] => {
+    console.log("searchVenue : [" + term + "]");
+
+    if (!term || term.length < 2) {
+      return [];
+    }
+
+    const results =
+      VenueKeyMap.filter(
+        (kvp: any) =>
+          kvp.venueBts.name.toLowerCase().indexOf(term.toLowerCase()) >
+          -1
       )
-      // tslint:disable-next-line:semicolon
-    );
+      .map((kvp: any) => kvp.venueBts.name as string)
+      .slice(0, 10);
+
+    return results;
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -100,7 +120,25 @@ export class GigDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.getShowsInfo();
+    const venueFormControl = this.VenueFormControl;
+
+    if (!!venueFormControl) {
+      this.filteredVenues = venueFormControl.valueChanges
+        .pipe(
+          startWith(""),
+          map(value => this.searchVenue(value))
+      );
+    }
+
+    const artistFormControl = this.ArtistFormControl;
+
+    if (!!artistFormControl) {
+      this.filteredKnownArtists = artistFormControl.valueChanges
+        .pipe(
+          startWith(""),
+          map(value => this.searchKnownArtists(value))
+      );
+    }
 
     const flattened = (arr: string[][]) => ([] as string[]).concat(...arr);
 
@@ -111,6 +149,8 @@ export class GigDetailComponent implements OnInit {
       this.showsInfo = showsInfo;
 
       this.sortShows(this.showsInfo);
+
+      this.profileForm = this.getProfileForm();
 
       const showsArtistNamesNested = showsInfo.shows.map(show =>
         show.artists.map(artist => artist.name)
@@ -146,8 +186,6 @@ export class GigDetailComponent implements OnInit {
       uniqueShowsArtistNames.sort();
 
       this.knownArtists = uniqueShowsArtistNames;
-
-      this.profileForm = this.getProfileForm();
     };
 
     const getErrorFn = (error: any) => {
@@ -164,6 +202,28 @@ export class GigDetailComponent implements OnInit {
     this.showService
       .getShowsInfo()
       .subscribe(getSuccessFn, getErrorFn, getCompleteFn);
+  }
+
+  get VenueFormControl(): FormControl | null {
+    if (!this.profileForm) {
+      return null;
+    }
+
+    const result = this.profileForm.get("venue");
+
+    return result as FormControl;
+  }
+
+  get ArtistFormControl(): FormControl | null {
+    if (!this.profileForm) {
+      return null;
+    }
+
+    const artists = this.profileForm.get("artists") as FormArray;
+    const firstArtist = artists ? artists.controls[0] : null;
+    const result = firstArtist ? firstArtist.get("name") : null;
+
+    return result as FormControl;
   }
 
   get show(): Show | null {
@@ -266,31 +326,31 @@ export class GigDetailComponent implements OnInit {
   //   return flat.some(Array.isArray) ? this.flattenNestedArray(flat) : flat;
   // }
 
-  flattenNestedArray<T>(array: T[][], mutable: T[][] = []): T[] {
-    const toString = Object.prototype.toString;
-    const arrayTypeStr = "[object Array]";
+//   flattenNestedArray<T>(array: T[][], mutable: T[][] = []): T[] {
+//     const toString = Object.prototype.toString;
+//     const arrayTypeStr = "[object Array]";
 
-    const result: T[] = [];
-    const nodes = (mutable && array) || array.slice();
-    let node: any;
+//     const result: T[] = [];
+//     const nodes = (mutable && array) || array.slice();
+//     let node: any;
 
-    if (!array.length) {
-        return result;
-    }
+//     if (!array.length) {
+//         return result;
+//     }
 
-    node = nodes.pop();
+//     node = nodes.pop();
 
-    do {
-        if (toString.call(node) === arrayTypeStr) {
-            nodes.push.apply(nodes, node);
-        } else {
-            result.push(node);
-        }
-    } while (nodes.length && (node = nodes.pop()) !== undefined);
+//     do {
+//         if (toString.call(node) === arrayTypeStr) {
+//             nodes.push.apply(nodes, node);
+//         } else {
+//             result.push(node);
+//         }
+//     } while (nodes.length && (node = nodes.pop()) !== undefined);
 
-    result.reverse(); // we reverse result to restore the original order
-    return result;
-}
+//     result.reverse(); // we reverse result to restore the original order
+//     return result;
+// }
 
   get profileFormJson() {
     if (this.profileForm) {
@@ -433,14 +493,16 @@ export class GigDetailComponent implements OnInit {
           } else {
             showToUpdate.eventIdBts = undefined;
           }
+        } else {
+          showsInfo.shows.push(show);
         }
       }
 
       this.sortShows(showsInfo);
 
       const putSuccessFn = (nextShowsInfo: ShowsInfo) => {
-        // console.log("putShowsInfo:successFn");
-        // console.log(nextShowsInfo);
+        console.log("putShowsInfo:successFn");
+        console.log(nextShowsInfo);
 
         this.showsInfo = nextShowsInfo;
 
@@ -451,8 +513,8 @@ export class GigDetailComponent implements OnInit {
       };
 
       const putErrorFn = (error: any) => {
-        // console.log("putShowsInfo:errorFn");
-        // console.log(error);
+        console.log("putShowsInfo:errorFn");
+        console.log(error);
 
         this.errorMessage = error.message;
       };
@@ -460,7 +522,7 @@ export class GigDetailComponent implements OnInit {
       const putCompleteFn = () => {
         // console.log("putShowsInfo:completeFn");
 
-        this.isUpdating = false;
+        // this.isUpdating = false;
       };
 
       if (isCleanupRequired) {

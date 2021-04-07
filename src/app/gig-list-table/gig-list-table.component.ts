@@ -25,6 +25,9 @@ export class GigListTableComponent implements AfterViewInit, OnInit, OnChanges {
   @Input()
   showPastEvents = false;
 
+  @Input()
+  thresholdInDays = 0;
+
   // @Output()
   // filteredShowCountChangedEvent = new EventEmitter<number>();
 
@@ -48,7 +51,7 @@ export class GigListTableComponent implements AfterViewInit, OnInit, OnChanges {
   }
 
   private refreshData() {
-    this.dataSource.loadGigs(this.artistFilter || "", this.showPastEvents, 0);
+    this.dataSource.loadGigs(this.artistFilter || "", this.showPastEvents, this.thresholdInDays);
     // this.filteredShowCountChangedEvent.emit(this.filteredShowCount);
   }
 

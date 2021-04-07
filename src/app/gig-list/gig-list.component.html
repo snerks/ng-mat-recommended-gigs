@@ -1,10 +1,8 @@
-<mat-toolbar color="primary">
-  <span>Gigs Of Note</span>
-</mat-toolbar>
 <div *ngIf="showsInfo; then showsInfoContent; else loadingShowsContent"></div>
 <ng-template #loadingShowsContent>Loading Shows...</ng-template>
 
 <ng-template #showsInfoContent>
+  <!-- <div>thresholdInDays = [{{ thresholdInDays }}]</div> -->
   <div
     style="
       display: flex;
@@ -52,6 +50,7 @@
     [shows]="shows"
     [artistFilter]="artistsSearchTerm"
     [showPastEvents]="showPastEvents"
+    [thresholdInDays]="thresholdInDays"
   >
     <!-- (filteredShowCountChangedEvent)="onFilteredShowCountChanged($event)" -->
   </app-gig-list-table>

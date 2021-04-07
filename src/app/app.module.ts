@@ -35,7 +35,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from "@angular/material-moment-adapte
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: "en-GB" },
-    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}},
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true} },
     MatDatepicker
   ],
   bootstrap: [AppComponent]
